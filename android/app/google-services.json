@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "784251688409",
+    "firebase_url": "https://weeat-563a9.firebaseio.com",
+    "project_id": "weeat-563a9",
+    "storage_bucket": "weeat-563a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784251688409:android:ced5536074d8b1e6",
+        "android_client_info": {
+          "package_name": "es.alejandrobrmp.weeat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784251688409-vh62tm9tclh5cedn6g2obkjo22oqk5ff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFHfR_MI5YK3O2xBIUBPu5hL8blmdvEbk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
