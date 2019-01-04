@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-// THEMES
-
-
-// MAIN
+// region MAIN
 final ThemeData mainTheme = new ThemeData(
   fontFamily: 'Open Sans',
   canvasColor: Colors.orange[200],
@@ -13,22 +10,45 @@ final ThemeData mainTheme = new ThemeData(
   // textTheme: TextTheme(),
 );
 
-// LOGIN SCREEN
+// endregion MAIN
+
+// region MAIN DRAWER
+
+final ThemeData drawerTheme = mainTheme.copyWith(
+  canvasColor: Colors.orange[100],
+  dividerColor: Colors.grey,
+);
+
+// region TEXT
+
+final TextStyle kMainDrawerNameTextStyle = new TextStyle(color: Colors.black, fontSize: 20);
+
+final TextStyle kMainDrawerEmailTextStyle = new TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 12);
+
+// endregion TEXT
+
+// endregion MAIN DRAWER
+
+// region LOGIN SCREEN
 
 final ThemeData loginTheme = mainTheme.copyWith();
 
-// TEXT
+// region TEXT
 
 final TextStyle kLoginScreenTitleTextStyle = new TextStyle(
   fontSize: 50,
   fontWeight: FontWeight.bold,
 );
 
-// TUTORIAL SCREEN
+// endregion TEXT
+
+// endregion LOGIN SCREEN
+
+// region TUTORIAL SCREEN
 
 final ThemeData tutorialTheme = mainTheme.copyWith();
 
-// TEXT
+// region TEXT
 
 final TextStyle kTutorialScreenTitleTextStyle = new TextStyle(
   fontSize: 50,
@@ -40,6 +60,12 @@ final TextStyle kTutorialScreenBodyTextStyle = new TextStyle(
   fontWeight: FontWeight.normal,
 );
 
-// HOME SCREEN
+// endregion TEXT
+
+// endregion TUTORIAL SCREEN
+
+// region HOME SCREEN
 
 final ThemeData homeTheme = mainTheme.copyWith();
+
+// endregion HOME SCREEN

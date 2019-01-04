@@ -12,18 +12,18 @@ import 'package:we_eat/views/tutorial_screen.dart';
 void main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   bool tutorialCompleted = preferences.getBool(SharedPreferencesReferences.BOOL_INITIAL_TUTORIAL);
-
-  if (tutorialCompleted == null || !tutorialCompleted) {
-    startApp(TutorialScreen());
-  } else {
-    FirebaseUser user = await FirebaseService().currentFirebaseUser();
-
-    if (user != null) {
-      startApp(HomeScreen());
-    } else {
-      startApp(LoginScreen());
-    }
-  }
+  startApp(HomeScreen());
+//  if (tutorialCompleted == null || !tutorialCompleted) {
+//    startApp(TutorialScreen());
+//  } else {
+//    FirebaseUser user = await FirebaseService().currentFirebaseUser();
+//
+//    if (user != null) {
+//      startApp(HomeScreen());
+//    } else {
+//      startApp(LoginScreen());
+//    }
+//  }
 }
 
 void startApp(Widget home) => runApp(WeEatApp(home: home,));
