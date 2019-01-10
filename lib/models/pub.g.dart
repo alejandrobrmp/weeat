@@ -9,22 +9,16 @@ part of 'pub.dart';
 Pub _$PubFromJson(Map json) {
   return Pub(
       name: json['name'] as String,
+      organizer: json['organizer'] == null
+          ? null
+          : const DocumentReferenceJsonConverter()
+              .fromJson(json['organizer'] as DocumentReference),
       participants: (json['participants'] as List)
           ?.map((e) => e == null
               ? null
               : const DocumentReferenceJsonConverter()
                   .fromJson(e as DocumentReference))
-          ?.toList(),
-      groups: (json['groups'] as List)
-          ?.map((e) => e == null ? null : Group.fromJson(e as Map))
-          ?.toList(),
-      product: (json['product'] as List)
-          ?.map((e) => e == null ? null : Product.fromJson(e as Map))
-          ?.toList())
-    ..organizer = json['organizer'] == null
-        ? null
-        : const DocumentReferenceJsonConverter()
-            .fromJson(json['organizer'] as DocumentReference);
+          ?.toList());
 }
 
 Map<String, dynamic> _$PubToJson(Pub instance) => <String, dynamic>{
@@ -36,7 +30,5 @@ Map<String, dynamic> _$PubToJson(Pub instance) => <String, dynamic>{
           ?.map((e) => e == null
               ? null
               : const DocumentReferenceJsonConverter().toJson(e))
-          ?.toList(),
-      'groups': instance.groups?.map((e) => e?.toJson())?.toList(),
-      'product': instance.product?.map((e) => e?.toJson())?.toList()
+          ?.toList()
     };

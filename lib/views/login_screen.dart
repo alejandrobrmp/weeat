@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:we_eat/models/pub.dart';
+import 'package:we_eat/models/user.dart';
 import 'package:we_eat/services/firebase_service.dart';
 import 'package:we_eat/themes/apptheme.dart';
 

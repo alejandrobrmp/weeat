@@ -15,12 +15,12 @@ class _MainDrawerState extends State<MainDrawer> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseService().signIn().then((user) => debugPrint('Logg'));
     FirebaseService().onAuthstateChanged().listen((FirebaseUser user) {
       setState(() {
         currentUser = user;
       });
     });
+    FirebaseService().signIn().then((user) => debugPrint('Logg'));
   }
 
   @override
@@ -33,9 +33,6 @@ class _MainDrawerState extends State<MainDrawer> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             _getUserBlock(),
-            Divider(
-              height: 2,
-            ),
           ],
         ),
       ),

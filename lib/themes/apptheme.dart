@@ -15,7 +15,7 @@ final ThemeData mainTheme = new ThemeData(
 // region MAIN DRAWER
 
 final ThemeData drawerTheme = mainTheme.copyWith(
-  canvasColor: Colors.orange[100],
+  canvasColor: Colors.white,
   dividerColor: Colors.grey,
 );
 
@@ -69,3 +69,23 @@ final TextStyle kTutorialScreenBodyTextStyle = new TextStyle(
 final ThemeData homeTheme = mainTheme.copyWith();
 
 // endregion HOME SCREEN
+
+// region WIDGETS
+
+// region SELECTABLE_BUTTON
+
+final TextStyle kIconButtonSelectedTextStyle = new TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.normal,
+  color: mainTheme.accentColor
+);
+
+final TextStyle kIconButtonTextStyle = new TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.normal,
+    color: Colors.black
+);
+
+// endregion SELECTABLE_BUTTON
+
+// endregion WIDGETS
