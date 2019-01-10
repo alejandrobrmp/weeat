@@ -1,18 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:we_eat/const/shared_preferences_references.dart';
-import 'package:we_eat/services/firebase_service.dart';
 import 'package:we_eat/themes/apptheme.dart';
 import 'package:we_eat/views/home_screen.dart';
-import 'package:we_eat/views/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:we_eat/views/tutorial_screen.dart';
+import 'package:we_eat/views/tutorial/tutorial_screen.dart';
 
 void main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
   bool tutorialCompleted = preferences.getBool(SharedPreferencesReferences.BOOL_INITIAL_TUTORIAL);
-  startApp(HomeScreen());
+  startApp(TutorialScreen());
 //  if (tutorialCompleted == null || !tutorialCompleted) {
 //    startApp(TutorialScreen());
 //  } else {
@@ -51,7 +48,6 @@ class WeEatApp extends StatelessWidget {
       },
       routes: <String, WidgetBuilder> {
         '/tutorial': (BuildContext context) => TutorialScreen(),
-        '/login': (BuildContext context) => LoginScreen(),
         '/home': (BuildContext context) => HomeScreen()
       },
       home: home
