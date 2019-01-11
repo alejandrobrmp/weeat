@@ -5,6 +5,8 @@ import 'package:we_eat/widgets/scrollable_text.dart';
 import 'package:we_eat/widgets/stepper.dart' as Widgets;
 
 class TutorialScreen extends StatelessWidget {
+  Widgets.StepperController c;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,35 +17,22 @@ class TutorialScreen extends StatelessWidget {
         child: Theme(
           data: tutorialTheme,
           child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(0),
-              child: Center(
-                child: Widgets.Stepper(
+            child: OrientationBuilder(
+              builder: (context, orientation) {
+                return Widgets.Stepper(
                   canExit: false,
+                  canGoBack: true,
+                  onExit: () => debugPrint('Trying exit'),
+                  onFinish: () => debugPrint('Trying finish'),
+                  titleContent: Text('Tutorial'),
                   steps: <Widget>[
-                    Container(child: Text('Step 1'),),
-                    Container(child: Text('Step 2'),),
-//                    OrientationBuilder(
-//                      builder: (context, orientation) {
-//                        return Column(
-//                            // Single Child
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            crossAxisAlignment: CrossAxisAlignment.stretch,
-//                            children: getLayout(orientation));
-//                      },
-//                    ),
-//                    OrientationBuilder(
-//                      builder: (context, orientation) {
-//                        return Column(
-//                          // Single Child
-//                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                            crossAxisAlignment: CrossAxisAlignment.stretch,
-//                            children: getLayout(orientation));
-//                      },
-//                    )
+                    _getFirstStep(orientation),
+                    _getFirstStep(orientation),
+                    _getFirstStep(orientation),
+                    _getFirstStep(orientation),
                   ],
-                ),
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -51,7 +40,7 @@ class TutorialScreen extends StatelessWidget {
     );
   }
 
-  List<Widget> getLayout(Orientation orientation) {
+  Widget _getFirstStep(Orientation orientation) {
     List<Widget> layout = List<Widget>();
 
     layout.addAll(<Widget>[
@@ -81,12 +70,15 @@ class TutorialScreen extends StatelessWidget {
           style: kTutorialScreenBodyTextStyle,
         ),
       ),
-      RaisedButton(
-        child: Text('BUTTON'),
-        onPressed: () => debugPrint('sadasd'),
-      )
     ]);
 
-    return layout;
+    return Padding(
+      padding: EdgeInsets.all(orientation == Orientation.portrait ? 40 : 30),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: layout,
+      ),
+    );
   }
 }

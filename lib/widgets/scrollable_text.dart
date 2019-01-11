@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_eat/widgets/scrollable_content.dart';
 
 class ScrollableTextExpanded extends StatelessWidget {
   Text text;
@@ -8,8 +9,11 @@ class ScrollableTextExpanded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Center(child: text),
+      child: ScrollableContent(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 5),
+          child: Center(child: text),
+        ),
       ),
     );
   }
@@ -23,8 +27,11 @@ class ScrollableTextFlexible extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      child: SingleChildScrollView(
-        child: Center(child: text),
+      child: ScrollableContent(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 5),
+          child: Center(child: text),
+        ),
       ),
     );
   }

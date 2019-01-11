@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:we_eat/const/strings.dart';
 
 class StepperController {
+  final int initialStep;
+  int currentStep;
+
   Function(int) onStepChange;
   Function(bool) onSetCanNext;
 
@@ -11,16 +14,10 @@ class StepperController {
     }
   }
 
-  StepperController({this.onStepChange, this.onSetCanNext});
-
+  StepperController({this.initialStep = 0, this.onStepChange, this.onSetCanNext}) { this.currentStep = this.initialStep; }
 }
-PageController a;
 
-enum StepperType {
-  None,
-  Custom,
-  Default
-}
+enum StepperType { None, Default }
 
 class Stepper extends StatefulWidget {
   StepperType titleType;
@@ -29,7 +26,8 @@ class Stepper extends StatefulWidget {
   Widget titleContent;
   Widget bottomContent;
 
-  int initialStep;
+  Gradient gradient;
+
   StepperController controller;
   List<Widget> steps;
   Function onFinish;
@@ -38,49 +36,40 @@ class Stepper extends StatefulWidget {
   Function onExit;
   double elevation;
 
-  Stepper({
-    this.titleType = StepperType.Default,
-    this.titleContent,
-    this.bottomType = StepperType.Default,
-    this.bottomContent,
-    this.initialStep = 0,
-    this.onFinish,
-    this.canGoBack = true,
-    this.canExit = true,
-    this.onExit,
-    this.controller, // TODO: Default
-    this.steps,
-    this.elevation = 5
-  }) {
-    if (controller == null) {
-      controller = StepperController();
-    }
-  }
+  Stepper(
+      {this.titleType = StepperType.Default,
+      this.titleContent,
+      this.bottomType = StepperType.Default,
+      this.bottomContent,
+      this.gradient,
+      this.onFinish,
+      this.canGoBack = true,
+      this.canExit = true,
+      this.onExit,
+      this.controller, // TODO: Default
+      this.steps,
+      this.elevation = 5});
 
   @override
-  _StepperState createState() => _StepperState(currentStep: initialStep);
-
-  // TODO: Static screen (scaffold)
+  _StepperState createState() => _StepperState(
+        controller: controller != null ? controller : StepperController(),
+      );
 }
 
 class _StepperState extends State<Stepper> {
-  int currentStep;
+  final StepperController controller;
 
   bool canNext = true;
   PageController pageController;
 
-  _StepperState({this.currentStep});
+  _StepperState({this.controller});
 
   @override
   void initState() {
     super.initState();
 
-    widget.controller.onStepChange = (int step) {
-      setState(() {});
-    };
-
     if (widget.bottomType == StepperType.Default) {
-      widget.controller.onSetCanNext = (bool value) {
+      controller.onSetCanNext = (bool value) {
         setState(() {
           canNext = value;
         });
@@ -92,56 +81,69 @@ class _StepperState extends State<Stepper> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        _getTitle(),
-        Flexible(child: _getContent()),
-        _getBottomContent()
-      ],
+      children: <Widget>[_getTitle(), Flexible(child: Container(child: _getContent())), _getBottomContent()],
     );
   }
 
   Widget _getTitle() {
-    bool isFirstStep = currentStep == 0;
-    bool backButtonEnabled = isFirstStep ? widget.canExit : true;
-    Container backArrow = !widget.canGoBack ? Container(width: 20, height: 50,) : Container(
-      height: 50,
-      width: 50,
-      child: Center(
-        child: IconButton(icon: Icon(Icons.arrow_back), onPressed: !backButtonEnabled ? null : () {
-          if (isFirstStep) {
-            if (widget.onExit != null) {
-              widget.onExit();
-            }
-          } else {
-            _changeStep(this.currentStep - 1);
-          }
-        }),
-      ),
-    );
+    if (widget.titleType == StepperType.None) {
+      return Container();
+    }
 
-    Widget defaultTitle = Material(
-      elevation: widget.elevation,
-      child: Container(
-        height: 50,
-        child: Row(
+    bool isFirstStep = controller.currentStep == 0;
+    bool backButtonEnabled = isFirstStep ? widget.canExit : true;
+    Container backArrow = !widget.canGoBack
+        ? Container(
+            width: 20,
+            height: 50,
+          )
+        : Container(
+            height: 50,
+            width: 50,
+            child: Center(
+              child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: !backButtonEnabled
+                      ? null
+                      : () {
+                          if (isFirstStep) {
+                            if (widget.onExit != null) {
+                              widget.onExit();
+                            }
+                          } else {
+                            _changeStep(this.controller.currentStep - 1);
+                          }
+                        }),
+            ),
+          );
+
+    Widget content = Container();
+
+    switch (widget.titleType) {
+      case StepperType.Default:
+        content = Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             backArrow,
-            Text('${Strings.stepperDefaultTitleText} ${this.currentStep.toString()}'),
+            widget.titleContent != null ? widget.titleContent : Text('${Strings.stepperDefaultTitleText} ${this.controller.currentStep.toString()}'),
           ],
-        ),
+        );
+        break;
+      case StepperType.None:
+        break;
+      default:
+        break;
+    }
+
+    return Container(
+      decoration: _getElevation(top: true),
+      child: Container(
+        height: 50,
+        decoration: _getColor(),
+        child: content,
       ),
     );
-
-    switch (widget.titleType) {
-      case StepperType.Default:
-        return defaultTitle;
-      case StepperType.Custom:
-        return widget.titleContent;
-      case StepperType.None:
-        return Container();
-    }
   }
 
   Widget _getContent() {
@@ -150,49 +152,78 @@ class _StepperState extends State<Stepper> {
       itemBuilder: (context, index) {
         return widget.steps[index];
       },
-      controller: pageController = PageController(
-        initialPage: widget.initialStep
-      ),
+      controller: pageController = PageController(initialPage: controller.initialStep),
       physics: NeverScrollableScrollPhysics(),
     );
   }
 
   Widget _getBottomContent() {
-    Widget defaultBottomContent = Material(
-      elevation: widget.elevation,
-      child: Container(
-        child: RaisedButton(
-          child: Text(widget.steps.length - 1 == currentStep ? Strings.stepperNextButtonFinalText : Strings.stepperNextButtonNextText),
-          onPressed: !canNext ? null : () {
-            if (widget.steps.length - 1 == currentStep) {
-              if (widget.onFinish != null) {
-                widget.onFinish();
-              }
-            } else {
-              _changeStep(this.currentStep + 1);
-            }
-          },
-        ),
-      ),
-    );
+    if (widget.bottomType == StepperType.None) {
+      return Container();
+    }
+
+    Widget content = Container();
 
     switch (widget.bottomType) {
       case StepperType.Default:
-        return defaultBottomContent;
-      case StepperType.Custom:
-        return widget.titleContent;
+        content = widget.bottomContent != null ? widget.bottomContent : Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: RaisedButton(
+            child: Text(widget.steps.length - 1 == controller.currentStep ? Strings.stepperNextButtonFinalText : Strings.stepperNextButtonNextText),
+            onPressed: !canNext
+                ? null
+                : () {
+              if (widget.steps.length - 1 == controller.currentStep) {
+                if (widget.onFinish != null) {
+                  widget.onFinish();
+                }
+              } else {
+                _changeStep(this.controller.currentStep + 1);
+              }
+            },
+          ),
+        );
+        break;
       case StepperType.None:
-        return Container();
+        break;
+      default:
+        break;
     }
+
+    return Container(
+      decoration: _getElevation(),
+      child: Container(
+        height: 50,
+        decoration: _getColor(),
+        child: content,
+      ),
+    );
+  }
+
+  BoxDecoration _getElevation({bool top = false}) {
+    if (widget.elevation == null || widget.elevation == 0) {
+      return BoxDecoration();
+    }
+
+    return BoxDecoration(
+        boxShadow: <BoxShadow>[BoxShadow(color: Colors.black.withOpacity(.5), blurRadius: widget.elevation, spreadRadius: 0, offset: Offset(0, (top ? .1 : -.1)))]);
+  }
+
+  BoxDecoration _getColor() {
+    if (widget.gradient != null) {
+      return BoxDecoration(gradient: widget.gradient);
+    }
+
+    return BoxDecoration(color: Theme.of(context).canvasColor);
   }
 
   void _changeStep(int step) {
-    this.currentStep = step;
-    this.pageController.animateToPage(currentStep, duration: Duration(milliseconds: 300), curve: Curves.easeInOut).then((_) {
-      if (widget.controller.onStepChange != null) {
-        widget.controller.onStepChange(this.currentStep);
+    this.controller.currentStep = step;
+    this.pageController.animateToPage(controller.currentStep, duration: Duration(milliseconds: 300), curve: Curves.easeInOut).then((_) {
+      if (controller.onStepChange != null) {
+        controller.onStepChange(this.controller.currentStep);
       }
+      setState(() {});
     });
   }
-
 }
