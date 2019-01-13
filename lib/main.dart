@@ -4,7 +4,7 @@ import 'package:we_eat/const/shared_preferences_references.dart';
 import 'package:we_eat/themes/apptheme.dart';
 import 'package:we_eat/views/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:we_eat/views/tutorial/tutorial_screen.dart';
+import 'package:we_eat/views/tutorial_screen.dart';
 
 void main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -47,7 +47,6 @@ class WeEatApp extends StatelessWidget {
         );
       },
       routes: <String, WidgetBuilder> {
-        '/tutorial': (BuildContext context) => TutorialScreen(),
         '/home': (BuildContext context) => HomeScreen()
       },
       home: home

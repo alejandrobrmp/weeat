@@ -22,19 +22,16 @@ class _ScrollableContentState extends State<ScrollableContent> {
           });
         }
       },
-      child: OrientationBuilder(
-        builder: (context, orientation) {
-          return CustomPaint(
-            painter: CanvasBox(maxScroll: _lastMetrics?.maxScrollExtent, heightPixels: _lastMetrics?.pixels ?? 0),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: widget.child,
-            ),
-          );
-        },
+      child: CustomPaint(
+        painter: CanvasBox(maxScroll: _lastMetrics?.maxScrollExtent, heightPixels: _lastMetrics?.pixels ?? 0),
+        child: Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: widget.child,
+        ),
       ),
     );
   }
+
 }
 
 class CanvasBox extends CustomPainter {
@@ -45,7 +42,7 @@ class CanvasBox extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    maxScroll = maxScroll != null ? maxScroll : size.height / 2;
+    if (maxScroll == null || maxScroll == 0) return;
 
     Paint paint = Paint();
     paint.color = Colors.black.withOpacity(.5);

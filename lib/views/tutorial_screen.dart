@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:we_eat/const/strings.dart';
+import 'package:we_eat/services/firebase_service.dart';
 import 'package:we_eat/themes/apptheme.dart';
 import 'package:we_eat/widgets/scrollable_text.dart';
 import 'package:we_eat/widgets/stepper.dart' as Widgets;
@@ -22,8 +24,7 @@ class TutorialScreen extends StatelessWidget {
                 return Widgets.Stepper(
                   canExit: false,
                   canGoBack: true,
-                  onExit: () => debugPrint('Trying exit'),
-                  onFinish: () => debugPrint('Trying finish'),
+                  onFinish: () => _finishTutorial(context),
                   titleContent: Text('Tutorial'),
                   steps: <Widget>[
                     _getFirstStep(orientation),
@@ -38,6 +39,20 @@ class TutorialScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _finishTutorial(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
+    FirebaseService().signIn().then((FirebaseUser user) {
+      Navigator.of(context).popAndPushNamed('/home');
+    });
   }
 
   Widget _getFirstStep(Orientation orientation) {

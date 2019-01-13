@@ -64,6 +64,20 @@ class _StepperState extends State<Stepper> {
 
   _StepperState({this.controller});
 
+  Future<bool> _onWillPop() async {
+    bool isFirstStep = controller.currentStep == 0;
+
+    if (isFirstStep) {
+      return widget.canExit;
+    } else {
+      if (widget.canGoBack) {
+        _changeStep(this.controller.currentStep - 1);
+      }
+      return false;
+    }
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -79,9 +93,12 @@ class _StepperState extends State<Stepper> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[_getTitle(), Flexible(child: Container(child: _getContent())), _getBottomContent()],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[_getTitle(), Flexible(child: Container(child: _getContent())), _getBottomContent()],
+      ),
     );
   }
 
